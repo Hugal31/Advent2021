@@ -10,16 +10,12 @@
   (solve2 (parse-ints-file input)))
 
 (define-public (solve1 numbers)
-  (fold (lambda (n-1 n acc)
-          (if (> n n-1) (+ 1 acc) acc))
-        0 numbers (cdr numbers)))
+  (count >
+         (cdr numbers) numbers))
 
 (define-public (solve2 numbers)
-  (fold (lambda (n-3 n acc)
-          (if (> n n-3)
-              (+ 1 acc)
-              acc))
-        0 numbers (cdddr numbers)))
+  (count >
+         (cdddr numbers) numbers))
 
 (define-public (unit-tests)
   (let ((example-list
