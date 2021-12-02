@@ -1,6 +1,7 @@
 (define-module (advent-utils)
   #:use-module (ice-9 rdelim)
-  #:use-module (srfi srfi-41))
+  #:use-module (srfi srfi-41)
+  #:export (parse-lines-file-stream))
 
 (define-public (parse-lines-file port)
   (let* ((result '()))
