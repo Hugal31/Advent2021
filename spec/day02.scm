@@ -1,7 +1,8 @@
 (add-to-load-path (dirname (dirname (current-filename))))
 
 (use-modules ((days day02) #:prefix day02::)
-             (ggspec lib))
+             (ggspec lib)
+             (spec utils))
 
 (define example-list
   '((forward . 5)
@@ -11,7 +12,12 @@
     (down . 8)
     (forward . 2)))
 
-(suite "Day02 parse-instructions"
+(simple-example-suites
+ 2
+ `((,example-list . 150))
+ `((,example-list . 900)))
+
+(suite "Day 2 parse-instructions"
        (tests
         (test "should parse null list"
               e
@@ -31,15 +37,3 @@ down 3"
                (assert-true (error? (call-with-input-string "up b" day02::parse-instructions)))
                (assert-true (error? (call-with-input-string "forward c" day02::parse-instructions)))
                (assert-true (error? (call-with-input-string "down 1.2" day02::parse-instructions)))))))
-
-(suite "Day02 part1"
-       (tests
-        (test "solve1 should return 150 on example"
-              e
-              (assert-equal 150 (day02::solve1 example-list)))))
-
-(suite "Day02 part2"
-       (tests
-        (test "solve2 should return 900 on example"
-              e
-              (assert-equal 900 (day02::solve2 example-list)))))
