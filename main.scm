@@ -27,11 +27,11 @@
         (let* ((unit-tests (module-ref module 'unit-tests)))
 
           (unless unit-tests
-            (error "Could not resolve unit tests" module))
+            (error "Could not resolve unit-tests in" module))
 
           (unit-tests))
 
-        (let* ((challenge-number (string->number (caddr args)))
+        (let* ((challenge-number (string->number challenge))
                (function-name (format #f "parse-and-solve~d" challenge-number))
                (solve-function (module-ref module (string->symbol function-name)))
                (input-file (format #f "~a/day~2,'0d.txt" input-directory day-number)))
@@ -39,5 +39,5 @@
           (unless solve-function
             (error "Could not find function" function-name))
 
-          (format #t "~a" (call-with-input-file input-file solve-function))
+          (display (call-with-input-file input-file solve-function))
           (newline)))))
