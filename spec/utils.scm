@@ -1,5 +1,6 @@
 (define-module (spec utils)
   #:use-module (ggspec lib)
+  #:use-module (ice-9 format)
   #:use-module (ice-9 match))
 
 (define-public (simple-example-suites

@@ -23,21 +23,14 @@
     (unless module
       (error "Could not resolve module" module-name))
 
-    (if (equal? "test" challenge)
-        (let* ((unit-tests (module-ref module 'unit-tests)))
+    (let* ((challenge-number (string->number challenge))
+           (function-name (format #f "parse-and-solve~d" challenge-number))
 
-          (unless unit-tests
-            (error "Could not resolve unit-tests in" module))
+           (solve-function (module-ref module (string->symbol function-name)))
+           (input-file (format #f "~a/day~2,'0d.txt" input-directory day-number)))
 
-          (unit-tests))
+      (unless solve-function
+        (error "Could not find function" function-name))
 
-        (let* ((challenge-number (string->number challenge))
-               (function-name (format #f "parse-and-solve~d" challenge-number))
-               (solve-function (module-ref module (string->symbol function-name)))
-               (input-file (format #f "~a/day~2,'0d.txt" input-directory day-number)))
-
-          (unless solve-function
-            (error "Could not find function" function-name))
-
-          (display (call-with-input-file input-file solve-function))
-          (newline)))))
+      (display (call-with-input-file input-file solve-function))
+      (newline))))

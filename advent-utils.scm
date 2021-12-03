@@ -1,7 +1,8 @@
 (define-module (advent-utils)
   #:use-module (ice-9 rdelim)
   #:use-module (srfi srfi-41)
-  #:export (parse-lines-file-stream))
+  #:export (parse-lines-file-stream
+            parse-ints-file))
 
 (define-public (parse-lines-file port)
   (let* ((result '()))
@@ -18,5 +19,8 @@
         stream-null
         (stream-cons line (parse-lines-file-stream port)))))
 
-(define-public (parse-ints-file port)
-  (stream->list (stream-map string->number (parse-lines-file-stream port))))
+(define* (parse-ints-file port #:optional base)
+  (stream->list
+   (stream-map
+    (lambda (line) (string->number line (or base 10)))
+    (parse-lines-file-stream port))))
