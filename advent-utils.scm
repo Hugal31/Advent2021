@@ -19,8 +19,8 @@
         stream-null
         (stream-cons line (parse-lines-file-stream port)))))
 
-(define* (parse-ints-file port #:optional base)
+(define* (parse-ints-file port #:optional (base 10))
   (stream->list
    (stream-map
-    (lambda (line) (string->number line (or base 10)))
+    (lambda (line) (string->number line base))
     (parse-lines-file-stream port))))

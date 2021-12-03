@@ -11,8 +11,10 @@
   (solve2 (parse-ints-file input 2)))
 
 (define-public (solve1 numbers)
-  (* (get-gamma-rate numbers)
-     (get-epsilon-rate numbers)))
+  (let* ((max-bit-numbers (max-numbers-bit numbers))
+         (gamma-rate (get-gamma-rate numbers))
+         (epsilon-rate (bit-extract (lognot gamma-rate) 0 (1+ max-bit-numbers))))
+    (* gamma-rate epsilon-rate)))
 
 (define-public (solve2 numbers)
   (* (get-rating numbers #t)
@@ -20,9 +22,6 @@
 
 (define (get-gamma-rate numbers)
   (get-rate numbers #t))
-
-(define (get-epsilon-rate numbers)
-  (get-rate numbers #f))
 
 (define (get-rate numbers bit-value)
   (define max-bit-length (1+ (max-numbers-bit numbers)))
