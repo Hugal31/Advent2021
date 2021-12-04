@@ -24,3 +24,26 @@
    (stream-map
     (lambda (line) (string->number line base))
     (parse-lines-file-stream port))))
+
+(define-public (parse-sections port)
+  (let ((result '())
+        (current-section '()))
+
+    (stream-for-each
+     (lambda (line)
+       (if (string-null? line)
+           (unless (null? current-section)
+             (set! result (cons (reverse current-section) result))
+             (set! current-section '()))
+
+           (set! current-section (cons line current-section))))
+     (parse-lines-file-stream port))
+
+    (unless (null? current-section)
+      (set! result (cons (reverse current-section) result)))
+
+    (reverse result)))
+
+(define-public (string-split-non-empty str char_pred)
+  (filter (lambda (s) (not (string-null? s)))
+          (string-split str char_pred)))

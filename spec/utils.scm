@@ -1,12 +1,14 @@
 (define-module (spec utils)
   #:use-module (ggspec lib)
   #:use-module (ice-9 format)
-  #:use-module (ice-9 match))
+  #:use-module (ice-9 match)
+  #:export (simple-example-suites))
 
-(define-public (simple-example-suites
-                day-number
-                cases-part1
-                cases-part2)
+(define* (simple-example-suites
+          day-number
+          cases-part1
+          cases-part2
+          #:key (parse #f))
 
   "Define two suites, on per part, with N tests.
 
@@ -19,14 +21,18 @@
    cases-part2: same as cases-part1, but for part2."
 
   (let* ((module (resolve-module `(days ,(string->symbol (format #f "day~2,'0d" day-number)))))
-         (solve1 (module-ref module 'solve1))
-         (solve2 (module-ref module 'solve2)))
+         (solve1 (module-ref module (if parse 'parse-and-solve1 'solve1)))
+         (solve2 (module-ref module (if parse 'parse-and-solve2 'solve2))))
 
     (unless (and solve1 solve2)
       (error "Could not resolve solve1 or solve2 in module" (list module solve1 solve2)))
 
-    (simple-example-suite day-number 1 solve1 cases-part1)
-    (simple-example-suite day-number 2 solve2 cases-part2)))
+    (simple-example-suite day-number 1
+                          (if parse (lambda (s) (call-with-input-string s solve1)) solve1)
+                          cases-part1)
+    (simple-example-suite day-number 2
+                          (if parse (lambda (s) (call-with-input-string s solve2)) solve2)
+                          cases-part2)))
 
 (define (simple-example-suite day-number part-number solve-proc test-cases)
   (suite (format #f "Day ~d part ~d" day-number part-number)
