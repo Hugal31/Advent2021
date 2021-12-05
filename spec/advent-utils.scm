@@ -32,3 +32,15 @@ d e f
               (assert-equal
                '("1" "2" "3")
                (string-split-non-empty "  1 2   3" #\space)))))
+
+#!
+(suite "Test advent-utils misc"
+       (tests
+        (test "combination should return list combinations"
+              e
+              (assert-all
+               (assert-equal '() (combinations '() 2))
+               (assert-equal '() (combinations '(1) 2))
+               (assert-equal '((1 2)) (combinations '(1 2) 2))
+               (assert-equal '((1 2) (1 3) (2 3)) (combinations '(1 2 3) 2))))))
+!#

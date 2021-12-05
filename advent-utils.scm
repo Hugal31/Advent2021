@@ -47,3 +47,10 @@
 (define-public (string-split-non-empty str char_pred)
   (filter (lambda (s) (not (string-null? s)))
           (string-split str char_pred)))
+
+
+;; TODO Use stream
+;; (define-public (combinations l combination-size)
+;;   (if (< (length l) combination-size)
+;;       '()
+;;       (list l)))
