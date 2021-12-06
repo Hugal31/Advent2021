@@ -11,30 +11,27 @@
   (solve2 (parse input)))
 
 (define-public (solve1 numbers)
-  (length
-   (fold
-    (lambda (_ fishes)
-      (advance-ages fishes))
-    numbers
-    (iota 80))))
+  (predict-population numbers 80))
 
 (define-public (solve2 numbers)
-  (length
-   (fold
-    (lambda (_ fishes)
-      (advance-ages fishes))
-    numbers
-    (iota 256))))
+  (predict-population numbers 256))
 
-(define (advance-ages fishes)
-  (list-transduce
-   (compose (tmap age-and-breed) tflatten)
-   rcons fishes))
+(define (predict-population fishes days)
+  (define fishes-vec
+    (list->vector (map
+                   (lambda (day)
+                     (count (lambda (fish) (eq? day fish)) fishes))
+                   (iota 9))))
 
-(define (age-and-breed fish-timer)
-  (if (eq? 0 fish-timer)
-      (list 6 8)
-      (1- fish-timer)))
+  (for-each
+   (lambda (_)
+     (let ((n-ready-fishes (vector-ref fishes-vec 0)))
+       (vector-move-left! fishes-vec 1 9 fishes-vec 0)
+       (vector-set! fishes-vec 8 n-ready-fishes)
+       (vector-set! fishes-vec 6 (+ n-ready-fishes (vector-ref fishes-vec 6)))))
+   (iota days))
+
+  (fold + 0 (vector->list fishes-vec)))
 
 (define (parse input)
   (map string->number (string-split (read-line input) #\,)))
