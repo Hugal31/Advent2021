@@ -21,7 +21,7 @@
        (tests
         (test "should parse null list"
               e
-              (assert-equal '() (call-with-input-string "" day02::parse-instructions)))
+              (assert-equal '() (call-with-input-string "" day02::parse)))
         (test "should parse all instructions"
               e
               (assert-equal '((forward . 1)
@@ -30,10 +30,10 @@
                             (call-with-input-string "forward 1
 up 2
 down 3"
-                              day02::parse-instructions)))
+                              day02::parse)))
         (test "should throw error on invalid tet"
               e
               (assert-all
-               (assert-true (error? (call-with-input-string "up b" day02::parse-instructions)))
-               (assert-true (error? (call-with-input-string "forward c" day02::parse-instructions)))
-               (assert-true (error? (call-with-input-string "down 1.2" day02::parse-instructions)))))))
+               (assert-true (error? (call-with-input-string "up b" day02::parse)))
+               (assert-true (error? (call-with-input-string "forward c" day02::parse)))
+               (assert-true (error? (call-with-input-string "down 1.2" day02::parse)))))))

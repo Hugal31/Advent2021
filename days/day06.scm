@@ -25,13 +25,16 @@
 
   (for-each
    (lambda (_)
-     (let ((n-ready-fishes (vector-ref fishes-vec 0)))
-       (vector-move-left! fishes-vec 1 9 fishes-vec 0)
-       (vector-set! fishes-vec 8 n-ready-fishes)
-       (vector-set! fishes-vec 6 (+ n-ready-fishes (vector-ref fishes-vec 6)))))
+     (population-step! fishes-vec))
    (iota days))
 
   (fold + 0 (vector->list fishes-vec)))
 
-(define (parse input)
+(define (population-step! vec)
+  (let ((n-ready-fishes (vector-ref vec 0)))
+    (vector-move-left! vec 1 9 vec 0)
+    (vector-set! vec 8 n-ready-fishes)
+    (vector-set! vec 6 (+ n-ready-fishes (vector-ref vec 6)))))
+
+(define-public (parse input)
   (map string->number (string-split (read-line input) #\,)))

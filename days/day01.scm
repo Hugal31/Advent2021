@@ -16,3 +16,5 @@
 (define-public (solve2 numbers)
   (count >
          (cdddr numbers) numbers))
+
+(define-public parse parse-ints-file)

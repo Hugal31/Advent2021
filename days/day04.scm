@@ -109,7 +109,7 @@
       (iota width))
      )))
 
-(define (parse input)
+(define-public (parse input)
   (let ((sections (parse-sections input))
         (string->number10 (lambda (s) (string->number s 10))))
     (list

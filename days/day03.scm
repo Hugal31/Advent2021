@@ -66,3 +66,5 @@
   (fold
    (lambda (number acc) (max acc (1- (integer-length number))))
    0 numbers))
+
+(define-public parse parse-ints-file)

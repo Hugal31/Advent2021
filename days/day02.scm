@@ -45,7 +45,7 @@
 
     (* horizontal depth)))
 
-(define-public (parse-instructions input)
+(define (parse-instructions input)
   (stream->list
    (stream-map (lambda (line)
                  (match (string-split line #\space)
@@ -59,3 +59,5 @@
                    (("down" amount)
                     `(down . ,(string->number amount 10)))))
                (parse-lines-file-stream input))))
+
+(define-public parse parse-instructions)
