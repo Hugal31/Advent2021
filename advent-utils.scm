@@ -48,9 +48,5 @@
   (filter (lambda (s) (not (string-null? s)))
           (string-split str char_pred)))
 
-
-;; TODO Use stream
-;; (define-public (combinations l combination-size)
-;;   (if (< (length l) combination-size)
-;;       '()
-;;       (list l)))
+(define-public (parse-numbers-on-single-line port sep)
+  (map string->number (string-split (read-line port) sep)))

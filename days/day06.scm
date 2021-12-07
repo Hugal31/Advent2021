@@ -37,4 +37,4 @@
     (vector-set! vec 6 (+ n-ready-fishes (vector-ref vec 6)))))
 
 (define-public (parse input)
-  (map string->number (string-split (read-line input) #\,)))
+  (parse-numbers-on-single-line input #\,))
