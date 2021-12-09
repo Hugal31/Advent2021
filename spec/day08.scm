@@ -3,6 +3,9 @@
 (use-modules (ggspec lib)
              (spec utils))
 
+(define simple-example
+  "acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf")
+
 (define example-list
   "be cfbegad cbdgef fgaecd cgeb fdcge agebfd fecdb fabcd edb | fdgacbe cefdb cefbgd gcbe
 edbfga begcd cbg gc gcadebf fbgde acbgfd abcde gfcbed gfec | fcgedb cgb dgebacf gc
@@ -18,5 +21,42 @@ gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce
 (simple-example-suites
  8
  `((,example-list . 26))
- `()
+ `((,simple-example . 5353)
+   (,example-list . 61229))
  #:parse #t)
+
+(define eliminate-possibilities (@@ (days day08) eliminate-possibilities))
+
+(suite "Test day 8 utils"
+       (tests
+        (test "eliminate-possibilities should find easy digits"
+              e
+              (assert-equal
+               '((5 6)
+                 ()
+                 (2)
+                 ()
+                 ()
+                 (3)
+                 ())
+               (eliminate-possibilities '(2 3)
+                                        '((5 6 2)
+                                          ()
+                                          (1 2)
+                                          ()
+                                          ()
+                                          (3 4)
+                                          ()))))
+        ;; (test "eliminate-possibilities should find hard digits"
+        ;;       e
+        ;;       (assert-equal
+        ;;        '(()
+        ;;          ()
+        ;;          ()
+        ;;          ()
+        ;;          ()
+        ;;          ()
+        ;;          ())
+        ;;        (eliminate-possibilities '()
+        ;;                                 '())))
+        ))
