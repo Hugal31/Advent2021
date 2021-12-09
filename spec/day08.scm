@@ -23,7 +23,7 @@ gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce
  `((,example-list . 26))
  `((,simple-example . 5353)
    (,example-list . 61229))
- #:parse #t)
+ #:parse? #t)
 
 (define eliminate-possibilities (@@ (days day08) eliminate-possibilities))
 

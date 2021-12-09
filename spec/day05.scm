@@ -20,7 +20,7 @@
  5
  `((,example . 5))
  `((,example . 12))
- #:parse #t)
+ #:parse? #t)
 
 (suite "Test day 5 utils"
        (tests

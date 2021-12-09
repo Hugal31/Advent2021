@@ -28,7 +28,7 @@
  4
  `((,example . 4512))
  `((,example . 1924))
- #:parse #t)
+ #:parse? #t)
 
 (define parse (@@ (days day04) parse))
 (define apply-bingo (@@ (days day04) apply-bingo))

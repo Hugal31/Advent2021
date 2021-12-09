@@ -8,7 +8,7 @@
           day-number
           cases-part1
           cases-part2
-          #:key (parse #f))
+          #:key (parse? #f))
 
   "Define two suites, on per part, with N tests.
 
@@ -29,10 +29,10 @@
       (error "Could not resolve solve1 or solve2 in module" (list module solve1 solve2)))
 
     (simple-example-suite day-number 1
-                          (if parse (lambda (s) (solve1 (call-with-input-string s parse))) solve1)
+                          (if parse? (lambda (s) (solve1 (call-with-input-string s parse))) solve1)
                           cases-part1)
     (simple-example-suite day-number 2
-                          (if parse (lambda (s) (solve2 (call-with-input-string s parse))) solve2)
+                          (if parse? (lambda (s) (solve2 (call-with-input-string s parse))) solve2)
                           cases-part2)))
 
 (define (simple-example-suite day-number part-number solve-proc test-cases)
