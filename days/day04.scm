@@ -77,7 +77,7 @@
 (define (make-validation-array grid)
   "Return an array with the same shape as grid, but filled with #f"
   ;; There must be a better solution
-  (apply make-typed-array (cons 'b (cons #f (array-shape grid)))))
+  (apply make-typed-array 'b #f (array-shape grid)))
 
 (define (apply-bingo grid validation drawn-number)
   (array-map! validation
