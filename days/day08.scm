@@ -18,52 +18,73 @@
    tests))
 
 (define (solve-and-yield-output input output)
-  (let* ((displays (sort (append input output) cmp-easy-display))
-         (possibilities (create-possibilities)))
+  (compute-output output (solve input)))
 
-    ((@ (ice-9 pretty-print) pretty-print)
+(define (compute-output output solution)
+  (list-transduce
+   (compose
+    (tmap (lambda (display) (correct-wiring display solution)))
+    (tmap display->integer))
+   (lambda args
+     (match args
+       ((acc n) (+ n (* 10 acc)))
+       ((acc) acc)))
+   0
+   output))
+
+(define (correct-wiring display solution)
+  (sort
+   (map
+    (lambda (incorrect-segment)
+      (list-index (lambda (i) (eq? i incorrect-segment)) solution))
+    display)
+   <))
+
+(define (display->integer display)
+  (list-index
+   (lambda (num-display)
+     (equal? display num-display))
+   %nums-to-display))
+
+(define (solve displays)
+  (let* ((displays (sort displays (lambda (a b) (< (length a) (length b)))))
+         (displays-grouped
+          (list-transduce
+           (tpartition
+            (let ((last-return #f)
+                  (last-length 0))
+              (lambda (display)
+                (if (eq? (length display) last-length)
+                    last-return
+                    (begin
+                      (set! last-length (length display))
+                      (set! last-return (not last-return))
+                      last-return)))))
+           rcons
+           displays)))
+
+    (apply
+     append
      (fold
       eliminate-possibilities
-      possibilities
-      displays))
-    0))
+      (create-possibilities)
+      displays-grouped))))
 
-(define (eliminate-possibilities display possibilities)
+(define (eliminate-possibilities displays possibilities)
   "Display: a list of segment as (integer)
    Possibilities: a list of sets of possible output segments for each input segment"
-  (let ((possible-correct-segments (list-ref %digits-possible-per-length (length display))))
-    ;; TODO Find a way to remove this if
-    (if (eq? 1 (length possible-correct-segments))
-        (let ((correct-segments (car possible-correct-segments)))
-                                        ;(format #t "Testing ~a\nPossibilities are ~a\n" display possibilities)
-          (map
-           (lambda (segment segment-possibilities)
-             (if (memq segment correct-segments)
-                 (lset-intersection eq? segment-possibilities display)
-                 (lset-difference eq? segment-possibilities display)))
-           (iota 7)
-           possibilities))
-        possibilities)))
+  (let* ((display-length (length (car displays)))
+         (displays-intersection (apply lset-intersection eq? displays))
+         (possible-correct-segments (list-ref %digits-possible-per-length display-length))
+         (possible-correct-segments-set (apply lset-intersection eq? possible-correct-segments)))
 
-;; (define (remove-possibilities-if-found possibilities)
-;;   (define (get-found-numbers pos)
-;;     (list-transduce
-;;      (compose (tfilter (lambda (p) (= 1 (length p)))) tflatten)
-;;      rcons
-;;      pos))
-
-;;   (do ((prev-possibilities '() possibilities)
-;;        (found-numbers (get-found-numbers possibilities)
-;;                       (get-found-numbers possibilities)))
-;;       ((eq? prev-possibilities possibilities) possibilities)
-
-;;     (set! possibilities
-;;           (map
-;;            (lambda (segment-possibilities)
-;;              (if (= 1 (length segment-possibilities))
-;;                  segment-possibilities
-;;                  (lset-difference eq? segment-possibilities found-numbers)))
-;;            possibilities))))
+    (map
+     (lambda (segment segment-possibilities)
+       (if (memq segment possible-correct-segments-set)
+           (lset-intersection eq? segment-possibilities displays-intersection)
+           (lset-difference eq? segment-possibilities displays-intersection)))
+     (iota 7)
+     possibilities)))
 
 (define (cmp-easy-display a b)
   "Return true if a is more easy than b, that is: length of a has less possible digits than length of b"
